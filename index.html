@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nails Manager</title>
+    <title>Nails Manager Pro</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#f8bbd0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -14,6 +14,8 @@
             --light-pink: #fce4ec;
             --text-color: #4a4a4a;
             --white: #ffffff;
+            --success-bg: #e8f5e9;
+            --cancel-bg: #ffebee;
         }
 
         body {
@@ -27,62 +29,30 @@
             align-items: center;
         }
 
-        h2 { color: var(--dark-pink); text-align: center; }
+        h2 { color: var(--dark-pink); text-align: center; margin-bottom: 10px; }
 
-        /* Botões Principais */
         .header-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
+            display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; justify-content: center;
         }
 
         .btn {
-            background-color: var(--dark-pink);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: 0.3s;
+            background-color: var(--dark-pink); color: white; border: none; padding: 12px 20px;
+            border-radius: 25px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .btn:active { transform: scale(0.95); }
-
-        /* Filtros na Tela Principal */
         .search-area {
-            width: 100%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 15px;
+            width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;
         }
 
         .input-filter {
-            padding: 10px;
-            border: 1px solid var(--primary-pink);
-            border-radius: 20px;
-            outline: none;
-            box-sizing: border-box;
+            padding: 10px; border: 1px solid var(--primary-pink); border-radius: 20px; outline: none;
         }
 
-        /* Lista de Agendamentos */
-        #agenda-lista {
-            width: 100%;
-            max-width: 500px;
-        }
+        #agenda-lista { width: 100%; max-width: 500px; }
 
         .card-agenda {
-            background: var(--white);
-            margin-bottom: 10px;
-            padding: 15px;
-            border-radius: 15px;
-            border-left: 5px solid var(--dark-pink);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            background: var(--white); margin-bottom: 10px; padding: 15px; border-radius: 15px;
+            border-left: 5px solid var(--dark-pink); box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .agenda-info { font-weight: bold; margin-bottom: 10px; }
@@ -91,73 +61,54 @@
 
         /* Modais */
         .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;
         }
 
         .modal-content {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 400px;
-            max-height: 80vh;
-            overflow-y: auto;
+            background: var(--white); padding: 20px; border-radius: 20px; width: 90%;
+            max-width: 420px; max-height: 85vh; overflow-y: auto;
         }
 
         input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid var(--primary-pink);
-            border-radius: 10px;
-            box-sizing: border-box;
+            width: 100%; padding: 10px; margin: 8px 0; border: 1px solid var(--primary-pink);
+            border-radius: 10px; box-sizing: border-box;
         }
 
         .photo-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin: 10px auto;
-            border: 2px dashed var(--dark-pink);
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: relative; width: 100px; height: 100px; margin: 10px auto;
+            border: 2px dashed var(--dark-pink); border-radius: 50%; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .photo-fichario {
+            width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--primary-pink); display: block; margin: 0 auto 10px;
         }
 
         #preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        
         .remove-photo {
-            position: absolute;
-            top: 0; right: 0;
-            background: red;
-            color: white;
-            padding: 2px 6px;
-            cursor: pointer;
-            font-size: 12px;
-            display: none;
-            z-index: 10;
+            position: absolute; top: 5px; right: 5px; background: red; color: white;
+            padding: 2px 6px; cursor: pointer; border-radius: 50%; font-size: 10px;
         }
 
+        /* Histórico na Ficha */
+        .historico-item {
+            padding: 8px 12px; margin-bottom: 5px; border-radius: 8px; font-size: 0.85em;
+            display: flex; justify-content: space-between;
+        }
+        .status-concluido { background-color: var(--success-bg); color: #2e7d32; }
+        .status-cancelado { background-color: var(--cancel-bg); color: #c62828; }
+
         .cliente-item {
-            padding: 10px;
-            border-bottom: 1px solid var(--light-pink);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 12px; border-bottom: 1px solid var(--light-pink);
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <h2><i class="fas fa-hand-sparkles"></i> Nails Manager</h2>
+    <h2><i class="fas fa-gem"></i> Nails Manager</h2>
 
     <div class="header-buttons">
         <button class="btn" onclick="openModal('modalCadastro')"><i class="fas fa-user-plus"></i> Novo Cliente</button>
@@ -167,14 +118,14 @@
 
     <div class="search-area">
         <input type="date" id="filtroData" class="input-filter" onchange="renderAgenda()">
-        <input type="text" id="filtroNome" class="input-filter" placeholder="🔍 Buscar por nome..." oninput="renderAgenda()">
+        <input type="text" id="filtroNome" class="input-filter" placeholder="🔍 Buscar na agenda de hoje..." oninput="renderAgenda()">
     </div>
 
     <div id="agenda-lista"></div>
 
     <div id="modalCadastro" class="modal">
         <div class="modal-content">
-            <h3>Cadastro de Cliente</h3>
+            <h3>Novo Cadastro</h3>
             <div class="photo-container" onclick="document.getElementById('inputFoto').click()">
                 <i id="cam-icon" class="fas fa-camera" style="color: #ccc;"></i>
                 <img id="preview-img">
@@ -182,8 +133,8 @@
             </div>
             <input type="file" id="inputFoto" accept="image/*" capture="camera" hidden onchange="handleFile(this)">
             <input type="text" id="nome" placeholder="Nome Completo">
-            <input type="tel" id="telefone" placeholder="WhatsApp (ex: 5511999999999)">
-            <textarea id="obs" placeholder="Observações"></textarea>
+            <input type="tel" id="telefone" placeholder="WhatsApp (DDD + Número)">
+            <textarea id="obs" placeholder="Observações e Preferências"></textarea>
             <button class="btn" style="width:100%" onclick="salvarCliente()">Salvar Cliente</button>
             <button class="btn" style="width:100%; background:#ccc; margin-top:5px" onclick="closeModal('modalCadastro')">Fechar</button>
         </div>
@@ -191,19 +142,38 @@
 
     <div id="modalClientes" class="modal">
         <div class="modal-content">
-            <h3>Meus Clientes</h3>
+            <h3>Minhas Clientes</h3>
             <div id="lista-clientes-corpo"></div>
             <button class="btn" style="width:100%; margin-top:10px" onclick="closeModal('modalClientes')">Voltar</button>
+        </div>
+    </div>
+
+    <div id="modalFicha" class="modal">
+        <div class="modal-content">
+            <h3 style="text-align:center; margin-bottom:5px">Ficha da Cliente</h3>
+            <img id="ficha-foto" class="photo-fichario" src="https://via.placeholder.com/120?text=Sem+Foto">
+            <div style="text-align:center; margin-bottom:15px">
+                <strong id="ficha-nome" style="font-size:1.2em"></strong><br>
+                <span id="ficha-tel" style="color:#666"></span>
+            </div>
+            <p><strong>Obs:</strong> <span id="ficha-obs"></span></p>
+            <hr>
+            <h4>Histórico de Atendimentos</h4>
+            <div id="ficha-historico"></div>
+            <div style="display:flex; gap:5px; margin-top:15px">
+                <button class="btn" style="flex:1" onclick="prepararAgendamentoFicha()"><i class="fas fa-calendar-alt"></i> Agendar</button>
+                <button class="btn" style="background:#444" onclick="closeModal('modalFicha')">Fechar</button>
+            </div>
         </div>
     </div>
 
     <div id="modalAgendar" class="modal">
         <div class="modal-content">
             <h3>Agendar Horário</h3>
-            <p id="nome-cliente-agendando" style="font-weight:bold; color:var(--dark-pink)"></p>
+            <p id="nome-cliente-agendando" style="font-weight:bold"></p>
             <input type="date" id="data-agendamento">
             <input type="time" id="hora-agendamento">
-            <button class="btn" style="width:100%" onclick="salvarAgendamento()">Confirmar Agendamento</button>
+            <button class="btn" style="width:100%" onclick="salvarAgendamento()">Confirmar e Enviar WhatsApp</button>
             <button class="btn" style="width:100%; background:#ccc; margin-top:5px" onclick="closeModal('modalAgendar')">Cancelar</button>
         </div>
     </div>
@@ -212,11 +182,10 @@
         <div class="modal-content">
             <h3>Configurações</h3>
             <label>Mensagem de Confirmação:</label>
-            <textarea id="msgConfirma" rows="3"></textarea>
+            <textarea id="msgConfirma" rows="4"></textarea>
             <label>Mensagem de Cancelamento:</label>
             <textarea id="msgCancela" rows="3"></textarea>
-            <hr>
-            <button class="btn" style="width:100%; background:#4caf50" onclick="exportBackup()">Exportar Backup</button>
+            <button class="btn" style="width:100%; background:#4caf50; margin-top:10px" onclick="exportBackup()">Fazer Backup</button>
             <button class="btn" style="width:100%; background:#2196f3; margin-top:5px" onclick="importBackup()">Restaurar Backup</button>
             <button class="btn" style="width:100%; background:#ccc; margin-top:5px" onclick="closeModal('modalConfig')">Fechar</button>
         </div>
@@ -226,13 +195,14 @@
         let db = {
             clientes: JSON.parse(localStorage.getItem('nails_clientes')) || [],
             agendamentos: JSON.parse(localStorage.getItem('nails_agendamentos')) || [],
+            historico: JSON.parse(localStorage.getItem('nails_historico')) || [],
             config: JSON.parse(localStorage.getItem('nails_config')) || {
-                msgConfirma: "Olá [NOME], seu agendamento está confirmado para o dia [DATA] às [HORA].",
-                msgCancela: "Olá [NOME], seu agendamento do dia [DATA] foi cancelado."
+                msgConfirma: "Olá, [NOME]! ✨\n\nConfirmamos seu horário de atendimento para o dia [DATA] às [HORA]. Estou ansiosa para deixar suas unhas impecáveis! Em caso de imprevistos, por favor me avise com antecedência. Até logo! 🥰",
+                msgCancela: "Olá, [NOME]. ✨\n\nInfelizmente seu agendamento do dia [DATA] precisou ser cancelado. Para remarcar uma nova data, basta me chamar por aqui. Agradeço a compreensão!"
             }
         };
 
-        let clienteSelecionadoIndex = null;
+        let selecionadaIdx = null;
         let fotoBase64 = "";
 
         window.onload = function() {
@@ -246,17 +216,15 @@
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         function handleFile(input) {
-            const file = input.files[0];
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.src = e.target.result;
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 300;
-                    const scaleSize = MAX_WIDTH / img.width;
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scaleSize;
+                    const MAX = 300;
+                    let scale = MAX / img.width;
+                    canvas.width = MAX; canvas.height = img.height * scale;
                     canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
                     fotoBase64 = canvas.toDataURL('image/jpeg', 0.7);
                     document.getElementById('preview-img').src = fotoBase64;
@@ -265,64 +233,75 @@
                     document.getElementById('btn-remove-photo').style.display = 'block';
                 }
             };
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(input.files[0]);
         }
 
         function removePhoto(e) {
-            e.stopPropagation();
-            fotoBase64 = "";
+            e.stopPropagation(); fotoBase64 = "";
             document.getElementById('preview-img').style.display = 'none';
             document.getElementById('cam-icon').style.display = 'block';
             document.getElementById('btn-remove-photo').style.display = 'none';
-            document.getElementById('inputFoto').value = "";
         }
 
         function salvarCliente() {
             const nome = document.getElementById('nome').value;
             const tel = document.getElementById('telefone').value;
-            if(!nome || !tel) return alert("Preencha nome e telefone!");
+            if(!nome || !tel) return alert("Nome e Telefone são essenciais.");
             db.clientes.push({ nome, tel, obs: document.getElementById('obs').value, foto: fotoBase64 });
-            salvarLS();
-            closeModal('modalCadastro');
-            limparForm();
+            salvarLS(); closeModal('modalCadastro'); limparForm();
         }
 
         function openModalClientes() {
             const corpo = document.getElementById('lista-clientes-corpo');
             corpo.innerHTML = "";
             db.clientes.forEach((cli, i) => {
-                corpo.innerHTML += `<div class="cliente-item">
+                corpo.innerHTML += `<div class="cliente-item" onclick="abrirFicha(${i})">
                     <span>${cli.nome}</span>
-                    <div>
-                        <i class="fas fa-calendar-plus" onclick="prepararAgendamento(${i})" style="color:green; margin-right:10px"></i>
-                        <i class="fas fa-trash" onclick="excluirCliente(${i})" style="color:red"></i>
-                    </div>
+                    <i class="fas fa-chevron-right" style="color:#ddd"></i>
                 </div>`;
             });
             openModal('modalClientes');
         }
 
-        function excluirCliente(i) {
-            if(confirm("Excluir cliente?")) { db.clientes.splice(i, 1); salvarLS(); openModalClientes(); }
+        function abrirFicha(i) {
+            selecionadaIdx = i;
+            const cli = db.clientes[i];
+            document.getElementById('ficha-nome').innerText = cli.nome;
+            document.getElementById('ficha-tel').innerText = cli.tel;
+            document.getElementById('ficha-obs').innerText = cli.obs || "Nenhuma observação.";
+            document.getElementById('ficha-foto').src = cli.foto || "https://via.placeholder.com/120?text=Sem+Foto";
+            
+            const histCorpo = document.getElementById('ficha-historico');
+            histCorpo.innerHTML = "";
+            const meusHist = db.historico.filter(h => h.tel === cli.tel);
+            if(meusHist.length === 0) histCorpo.innerHTML = "<small>Nenhum registro anterior.</small>";
+            meusHist.reverse().forEach(h => {
+                const classe = h.status === 'Concluído' ? 'status-concluido' : 'status-cancelado';
+                histCorpo.innerHTML += `<div class="historico-item ${classe}">
+                    <span>${h.data.split('-').reverse().join('/')} às ${h.hora}</span>
+                    <strong>${h.status}</strong>
+                </div>`;
+            });
+
+            closeModal('modalClientes');
+            openModal('modalFicha');
         }
 
-        function prepararAgendamento(i) {
-            clienteSelecionadoIndex = i;
-            document.getElementById('nome-cliente-agendando').innerText = "Cliente: " + db.clientes[i].nome;
-            closeModal('modalClientes');
+        function prepararAgendamentoFicha() {
+            document.getElementById('nome-cliente-agendando').innerText = "Cliente: " + db.clientes[selecionadaIdx].nome;
+            closeModal('modalFicha');
             openModal('modalAgendar');
         }
 
         function salvarAgendamento() {
             const data = document.getElementById('data-agendamento').value;
             const hora = document.getElementById('hora-agendamento').value;
-            const cliente = db.clientes[clienteSelecionadoIndex];
-            if(!data || !hora) return alert("Data e hora obrigatórios!");
-            if(db.agendamentos.find(a => a.data === data && a.hora === hora)) return alert("Horário ocupado!");
+            const cliente = db.clientes[selecionadaIdx];
+            if(!data || !hora) return alert("Preencha data e hora.");
+            if(db.agendamentos.find(a => a.data === data && a.hora === hora)) return alert("Horário indisponível!");
 
             db.agendamentos.push({ nome: cliente.nome, tel: cliente.tel, data, hora });
-            salvarLS();
-            renderAgenda();
+            salvarLS(); renderAgenda();
             enviarWhats(cliente.tel, db.config.msgConfirma, cliente.nome, data, hora);
             closeModal('modalAgendar');
         }
@@ -331,50 +310,58 @@
             const lista = document.getElementById('agenda-lista');
             const fData = document.getElementById('filtroData').value;
             const fNome = document.getElementById('filtroNome').value.toLowerCase();
-            lista.innerHTML = `<h3 style="text-align:center; font-size:1em">Agenda de ${fData.split('-').reverse().join('/')}</h3>`;
+            lista.innerHTML = `<h3 style="text-align:center">${fData.split('-').reverse().join('/')}</h3>`;
 
             const filtrados = db.agendamentos.filter(a => a.data === fData && a.nome.toLowerCase().includes(fNome));
-            
             filtrados.sort((a,b) => a.hora.localeCompare(b.hora)).forEach(ag => {
                 const realIdx = db.agendamentos.indexOf(ag);
                 lista.innerHTML += `<div class="card-agenda">
                     <div class="agenda-info">${ag.hora} - ${ag.nome}</div>
                     <div class="agenda-actions">
                         <i class="fab fa-whatsapp" onclick="enviarWhats('${ag.tel}', db.config.msgConfirma, '${ag.nome}', '${ag.data}', '${ag.hora}')" style="color:#25D366"></i>
-                        <i class="fas fa-check-circle" onclick="concluir(${realIdx})" style="color:green"></i>
-                        <i class="fas fa-times-circle" onclick="cancelar(${realIdx})" style="color:red"></i>
+                        <i class="fas fa-check-circle" onclick="finalizar(${realIdx}, 'Concluído')" style="color:#4caf50"></i>
+                        <i class="fas fa-times-circle" onclick="cancelar(${realIdx})" style="color:#f44336"></i>
                     </div>
                 </div>`;
             });
         }
 
-        function concluir(i) { db.agendamentos.splice(i, 1); salvarLS(); renderAgenda(); }
+        function finalizar(i, status) {
+            const ag = db.agendamentos[i];
+            db.historico.push({ ...ag, status });
+            db.agendamentos.splice(i, 1);
+            salvarLS(); renderAgenda();
+        }
 
         function cancelar(i) {
-            if(confirm("Cancelar este agendamento?")) {
+            if(confirm("Deseja realmente cancelar? O cliente receberá um aviso.")) {
                 const ag = db.agendamentos[i];
                 enviarWhats(ag.tel, db.config.msgCancela, ag.nome, ag.data, ag.hora);
-                db.agendamentos.splice(i, 1);
-                salvarLS();
-                renderAgenda();
+                finalizar(i, 'Cancelado');
             }
         }
 
         function enviarWhats(tel, msgBase, nome, data, hora) {
-            const dtFormat = data.split('-').reverse().join('/');
-            let msg = msgBase.replace("[NOME]", nome).replace("[DATA]", dtFormat).replace("[HORA]", hora);
-            window.open(`https://api.whatsapp.com/send?phone=${tel}&text=${encodeURIComponent(msg)}`, '_blank');
+            const dt = data.split('-').reverse().join('/');
+            let msg = msgBase.replace("[NOME]", nome).replace("[DATA]", dt).replace("[HORA]", hora);
+            window.open(`https://api.whatsapp.com/send?phone=55${tel.replace(/\D/g,'')}&text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function salvarLS() {
             localStorage.setItem('nails_clientes', JSON.stringify(db.clientes));
             localStorage.setItem('nails_agendamentos', JSON.stringify(db.agendamentos));
+            localStorage.setItem('nails_historico', JSON.stringify(db.historico));
             localStorage.setItem('nails_config', JSON.stringify(db.config));
+        }
+
+        function limparForm() {
+            document.getElementById('nome').value = ""; document.getElementById('telefone').value = "";
+            document.getElementById('obs').value = ""; removePhoto({stopPropagation: ()=>{}});
         }
 
         function exportBackup() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
-            const a = document.createElement('a'); a.href = dataStr; a.download = "backup.json"; a.click();
+            const a = document.createElement('a'); a.href = dataStr; a.download = "nails_backup.json"; a.click();
         }
 
         function importBackup() {
@@ -385,11 +372,6 @@
                 reader.readAsText(e.target.files[0]);
             };
             input.click();
-        }
-
-        function limparForm() {
-            document.getElementById('nome').value = ""; document.getElementById('telefone').value = "";
-            document.getElementById('obs').value = ""; removePhoto({stopPropagation: ()=>{}});
         }
 
         document.getElementById('msgConfirma').onchange = (e) => { db.config.msgConfirma = e.target.value; salvarLS(); };
