@@ -23,10 +23,11 @@
             background-color: var(--light-pink);
             color: var(--text-color);
             margin: 0;
-            padding: 10px;
+            padding: 10px 10px 40px 10px; /* Padding extra no fundo para o rodapé */
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
         }
 
         h2 { color: var(--dark-pink); text-align: center; margin-bottom: 10px; }
@@ -92,7 +93,6 @@
             padding: 2px 6px; cursor: pointer; border-radius: 50%; font-size: 10px;
         }
 
-        /* Histórico na Ficha */
         .historico-item {
             padding: 8px 12px; margin-bottom: 5px; border-radius: 8px; font-size: 0.85em;
             display: flex; justify-content: space-between;
@@ -103,6 +103,12 @@
         .cliente-item {
             padding: 12px; border-bottom: 1px solid var(--light-pink);
             display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+        }
+
+        /* Rodapé Assinatura */
+        .footer-credit {
+            position: fixed; bottom: 5px; width: 100%; text-align: center;
+            font-size: 10px; color: var(--dark-pink); opacity: 0.6; z-index: 500;
         }
     </style>
 </head>
@@ -118,14 +124,16 @@
 
     <div class="search-area">
         <input type="date" id="filtroData" class="input-filter" onchange="renderAgenda()">
-        <input type="text" id="filtroNome" class="input-filter" placeholder="🔍 Buscar na agenda de hoje..." oninput="renderAgenda()">
+        <input type="text" id="filtroNome" class="input-filter" placeholder="🔍 Buscar na agenda..." oninput="renderAgenda()">
     </div>
 
     <div id="agenda-lista"></div>
 
+    <div class="footer-credit">by Edmaster App</div>
+
     <div id="modalCadastro" class="modal">
         <div class="modal-content">
-            <h3>Novo Cadastro</h3>
+            <h3 id="titulo-modal-cliente">Novo Cadastro</h3>
             <div class="photo-container" onclick="document.getElementById('inputFoto').click()">
                 <i id="cam-icon" class="fas fa-camera" style="color: #ccc;"></i>
                 <img id="preview-img">
@@ -135,8 +143,8 @@
             <input type="text" id="nome" placeholder="Nome Completo">
             <input type="tel" id="telefone" placeholder="WhatsApp (DDD + Número)">
             <textarea id="obs" placeholder="Observações e Preferências"></textarea>
-            <button class="btn" style="width:100%" onclick="salvarCliente()">Salvar Cliente</button>
-            <button class="btn" style="width:100%; background:#ccc; margin-top:5px" onclick="closeModal('modalCadastro')">Fechar</button>
+            <button class="btn" style="width:100%" id="btn-salvar-cli" onclick="salvarCliente()">Salvar Cliente</button>
+            <button class="btn" style="width:100%; background:#ccc; margin-top:5px" onclick="fecharCadastro()">Fechar</button>
         </div>
     </div>
 
@@ -157,8 +165,15 @@
                 <span id="ficha-tel" style="color:#666"></span>
             </div>
             <p><strong>Obs:</strong> <span id="ficha-obs"></span></p>
+            <div style="display:flex; gap:5px; margin-bottom:15px">
+                <button class="btn" style="flex:1; background:#2196f3; font-size:0.8em" onclick="editarClienteFicha()"><i class="fas fa-edit"></i> Editar Dados</button>
+                <button class="btn" style="flex:1; background:#f44336; font-size:0.8em" onclick="excluirClienteFicha()"><i class="fas fa-trash"></i> Excluir Cliente</button>
+            </div>
             <hr>
-            <h4>Histórico de Atendimentos</h4>
+            <div style="display:flex; justify-content:space-between; align-items:center">
+                <h4>Histórico</h4>
+                <span onclick="limparHistorico()" style="font-size:0.7em; color:red; cursor:pointer; text-decoration:underline">Limpar Histórico</span>
+            </div>
             <div id="ficha-historico"></div>
             <div style="display:flex; gap:5px; margin-top:15px">
                 <button class="btn" style="flex:1" onclick="prepararAgendamentoFicha()"><i class="fas fa-calendar-alt"></i> Agendar</button>
@@ -204,6 +219,7 @@
 
         let selecionadaIdx = null;
         let fotoBase64 = "";
+        let editandoIndex = null;
 
         window.onload = function() {
             document.getElementById('filtroData').value = new Date().toISOString().split('T')[0];
@@ -237,18 +253,63 @@
         }
 
         function removePhoto(e) {
-            e.stopPropagation(); fotoBase64 = "";
+            if(e) e.stopPropagation(); 
+            fotoBase64 = "";
             document.getElementById('preview-img').style.display = 'none';
             document.getElementById('cam-icon').style.display = 'block';
             document.getElementById('btn-remove-photo').style.display = 'none';
+            document.getElementById('inputFoto').value = "";
         }
 
         function salvarCliente() {
             const nome = document.getElementById('nome').value;
             const tel = document.getElementById('telefone').value;
+            const obs = document.getElementById('obs').value;
             if(!nome || !tel) return alert("Nome e Telefone são essenciais.");
-            db.clientes.push({ nome, tel, obs: document.getElementById('obs').value, foto: fotoBase64 });
-            salvarLS(); closeModal('modalCadastro'); limparForm();
+            
+            if(editandoIndex !== null) {
+                db.clientes[editandoIndex] = { nome, tel, obs, foto: fotoBase64 };
+                editandoIndex = null;
+            } else {
+                db.clientes.push({ nome, tel, obs, foto: fotoBase64 });
+            }
+            salvarLS(); fecharCadastro(); openModalClientes();
+        }
+
+        function editarClienteFicha() {
+            editandoIndex = selecionadaIdx;
+            const cli = db.clientes[editandoIndex];
+            document.getElementById('titulo-modal-cliente').innerText = "Editar Cliente";
+            document.getElementById('nome').value = cli.nome;
+            document.getElementById('telefone').value = cli.tel;
+            document.getElementById('obs').value = cli.obs;
+            if(cli.foto) {
+                fotoBase64 = cli.foto;
+                document.getElementById('preview-img').src = fotoBase64;
+                document.getElementById('preview-img').style.display = 'block';
+                document.getElementById('cam-icon').style.display = 'none';
+                document.getElementById('btn-remove-photo').style.display = 'block';
+            }
+            closeModal('modalFicha');
+            openModal('modalCadastro');
+        }
+
+        function excluirClienteFicha() {
+            if(confirm("Deseja realmente excluir esta cliente e todos os seus registros?")) {
+                db.clientes.splice(selecionadaIdx, 1);
+                salvarLS();
+                closeModal('modalFicha');
+                openModalClientes();
+            }
+        }
+
+        function limparHistorico() {
+            if(confirm("Deseja limpar o histórico desta cliente?")) {
+                const tel = db.clientes[selecionadaIdx].tel;
+                db.historico = db.historico.filter(h => h.tel !== tel);
+                salvarLS();
+                abrirFicha(selecionadaIdx);
+            }
         }
 
         function openModalClientes() {
@@ -354,9 +415,16 @@
             localStorage.setItem('nails_config', JSON.stringify(db.config));
         }
 
+        function fecharCadastro() {
+            closeModal('modalCadastro');
+            limparForm();
+        }
+
         function limparForm() {
+            editandoIndex = null;
+            document.getElementById('titulo-modal-cliente').innerText = "Novo Cadastro";
             document.getElementById('nome').value = ""; document.getElementById('telefone').value = "";
-            document.getElementById('obs').value = ""; removePhoto({stopPropagation: ()=>{}});
+            document.getElementById('obs').value = ""; removePhoto();
         }
 
         function exportBackup() {
