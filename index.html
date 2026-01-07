@@ -23,14 +23,21 @@
             background-color: var(--light-pink);
             color: var(--text-color);
             margin: 0;
-            padding: 10px 10px 60px 10px; /* Ajuste para não cobrir o rodapé */
+            padding: 10px 10px 60px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
 
-        h2 { color: var(--dark-pink); text-align: center; margin-bottom: 10px; }
+        /* CABEÇALHO COM LOGO */
+        .header-logo {
+            width: 100%;
+            max-width: 200px; /* Ajuste conforme o tamanho da sua logo */
+            height: auto;
+            margin-bottom: 15px;
+            display: block;
+        }
 
         .header-buttons {
             display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; justify-content: center;
@@ -104,7 +111,6 @@
             display: flex; justify-content: space-between; align-items: center; cursor: pointer;
         }
 
-        /* Rodapé Assinatura */
         .footer-credit {
             position: fixed; bottom: 10px; width: 100%; text-align: center;
             font-size: 12px; color: var(--dark-pink); opacity: 0.8; z-index: 500;
@@ -114,7 +120,7 @@
 </head>
 <body>
 
-    <h2><i class="fas fa-gem"></i> Nails Manager</h2>
+    <img src="logo.png" alt="Logo Nails Manager" class="header-logo">
 
     <div class="header-buttons">
         <button class="btn" onclick="openModal('modalCadastro')"><i class="fas fa-user-plus"></i> Novo Cliente</button>
@@ -136,7 +142,7 @@
             <img src="ed.png" alt="Edmaster" style="max-width: 150px; border-radius: 15px; margin-bottom: 15px;">
             <h3 style="color: var(--dark-pink);">Agradecimento</h3>
             <p style="font-size: 0.95em; color: var(--text-color); line-height: 1.5;">
-                Agradecemos por escolher o <strong>Nails Manager</strong> para gerir seu negócio. É uma honra fazer parte da sua jornada profissional.
+                Agradecemos por escolher o <strong>Edmaster App</strong> para gerir seu negócio. É uma honra fazer parte da sua jornada profissional.
             </p>
             <button class="btn" style="width:100%; margin-top:10px" onclick="closeModal('modalSobre')">Fechar</button>
         </div>
